@@ -1,0 +1,90 @@
+
+  cursor: not-allowed;
+  filter: grayscale(30%);
+}
+
+.bet-controls button.inactive {
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Auto play menu */
+.auto-play-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--dark-gray);
+  border: 1px solid var(--accent-purple);
+  border-radius: 4px;
+  padding: 8px;
+  display: none;
+  z-index: 10;
+}
+
+.auto-play-menu.active {
+  display: block;
+}
+
+.auto-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.auto-option {
+  background: var(--mid-gray);
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.auto-option:hover {
+  background: var(--accent-purple);
+}
+
+.auto-menu-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Row win highlight */
+.pull-window-row.row-win {
+  border-color: var(--accent-lime);
+  box-shadow: 0 0 15px var(--accent-lime);
+}
+
+/* Pay flash */
+.pay-flash {
+  background: var(--accent-lime);
+  color: var(--black);
+  font-weight: bold;
+  animation: pay-flash 0.5s ease-in-out;
+}
+
+@keyframes pay-flash {
+  0%, 100% { background: transparent; }
+  50% { background: rgba(255, 215, 0, 0.5); }
+}

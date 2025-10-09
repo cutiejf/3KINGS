@@ -1,3 +1,4 @@
+/* --- UNIFIED STYLESHEET --- */
 :root {
   --black: #0a0a0a;
   --dark-gray: #1a1a1a;
@@ -6,57 +7,69 @@
   --white: #ffffff;
   --accent-purple: #7340a3;
   --accent-lime: #abe83f;
-  --panel-gap: 8px;
+  --panel-gap: 6px;
+  --tab-height: 52px;
+  --tab-radius: 6px;
+  --tab-bg: linear-gradient(135deg, var(--accent-purple), #3a2b5c 80%);
+  --tab-flap-width: 22px;
 }
 
 body {
-  background: radial-gradient(circle at 40% 40%, var(--black), var(--dark-gray) 90%);
   font-family: 'Inter', 'Arial', sans-serif;
   color: var(--white);
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 14px;
+  background: var(--black);
   min-height: 100vh;
 }
 
 .game-wrapper {
+  border: 4px solid var(--mid-gray);
+  border-radius: 8px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+  padding: 8px;
+  background: var(--black);
   display: flex;
   flex-direction: column;
-  background: var(--black);
-  border: 6px solid var(--mid-gray);
-  border-radius: 12px; /* Increased for a softer look */
-  max-width: 820px; /* Increased for more space */
-  width: 100%; /* Changed to 100% for better responsiveness */
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-  padding: var(--panel-gap); /* Added padding */
+  height: auto;
+  min-height: 600px;
+  position: relative;
+  z-index: 1;
 }
 
+/* --- LAYOUT COLUMNS --- */
 .top-row {
   display: flex;
-  gap: var(--panel-gap);
-  /* padding: 8px; */ /* Removed padding, handled by game-wrapper */
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-/* Ticket side */
-.ticket-container {
-  flex: 1;
-  background: linear-gradient(180deg, var(--dark-gray) 0%, #111 100%);
+.pay-column, .ticket-container, .controls-column {
+  display: flex;
+  flex-direction: column;
+  background: var(--dark-gray);
   border: 2px solid var(--accent-purple);
   border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
-  padding: 12px 16px; /* Adjusted padding */
-  display: flex; /* Added for better internal alignment */
-  flex-direction: column; /* Added for vertical alignment */
+  padding: 12px;
 }
 
+.pay-column { flex: 0 0 200px; }
+.controls-column { flex: 0 0 180px; }
+.ticket-container { flex: 1 1 auto; }
+
+
+/* --- TICKET AREA --- */
 .ticket-header h1 {
   margin: 0 0 4px;
   font-size: 1.5em;
   text-align: center;
+  color: var(--white); /* Explicitly set color */
 }
-
 .ticket-header h2 {
   margin: 0 0 8px;
   font-size: 0.9em;
@@ -64,53 +77,239 @@ body {
   color: var(--light-gray);
 }
 
-.status-message {
-  background: var(--mid-gray);
-  padding: 8px;
-  border-radius: 4px;
-  text-align: center;
-  margin-bottom: 8px;
+/* Right column balancing and interaction blocks */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.game-area {
-  flex-grow: 1; /* Allow game area to fill space */
+.interaction-block {
+  background: #111;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--accent-purple);
+}
+
+.balance-display {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--accent-lime);
+  background: #1a1a1a;
+  padding: 6px 10px;
+  border-radius: 4px;
+  min-width: 100px;
+  text-align: center;
+  border: 1px solid var(--accent-purple);
+}
+
+.bet-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls-footer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-title {
+  margin: 4px 0 6px 0; /* tighter spacing above the pull tabs */
+  font-size: 0.95em;
+  color: var(--light-gray);
+}
+
+.status-message {
+  padding: 12px 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 12px;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #1b1425, #141018 80%);
+  border: 1px solid var(--accent-purple);
+  box-shadow: 0 0 15px rgba(115,64,163,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Large bold outcome text (WINNER / NOT A WINNER / etc.) */
+.status-message .status-win,
+.status-message .status-loss,
+.status-message .status-main {
+  font-size: 1.6em;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 4px rgba(255,255,255,0.25);
+}
+.status-message .status-win { color: var(--accent-lime); }
+.status-message .status-loss { color: #ff4c4c; }
+
+/* Subtext / detail below (smaller and dimmer) */
+.status-message .subtext,
+.status-message .status-sub {
+  font-size: 0.9em;
+  opacity: 0.85;
+  color: var(--light-gray);
+  letter-spacing: 0.3px;
+}
+
+.status-message.win-bg { background: #24491c; color: var(--accent-lime); }
+.status-message.loss-bg { background: #3a0e0e; color: #ff4c4c; }
+.status-message.neutral { background: #2b2b2b; color: var(--white); }
+.status-message.idle { background: #18141e; color: var(--light-gray); }
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* brief flash animation for loss fallback */
+.status-message.flash-loss {
+  animation: lossFlash 0.22s ease-in-out 1;
+}
+@keyframes lossFlash {
+  0% { box-shadow: 0 0 0 rgba(255,76,76,0); transform: scale(1); }
+  40% { box-shadow: 0 0 18px rgba(255,76,76,0.28); transform: scale(1.01); }
+  100% { box-shadow: 0 0 0 rgba(255,76,76,0); transform: scale(1); }
 }
 
 .pull-window-row {
-  position: relative;
-  margin: 8px 0; /* Increased margin */
-  border: 2px solid var(--light-gray);
-  border-radius: 6px;
-  height: 62px;
-  background: var(--mid-gray);
+  margin: 3px 0;
+  height: 64px; /* increased tab size for better visual grip */
+  border-radius: var(--tab-radius);
+  overflow: hidden;
+  background: var(--black);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  border: 2px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-.pull-window-row.row-win {
-  border-color: var(--accent-lime);
-  box-shadow: 0 0 15px var(--accent-lime);
-}
+
 .pull-tab {
   position: absolute;
   top: 0;
-  left: 0; /* Changed from right to left */
+  left: 0;
   width: 100%;
+  box-sizing: border-box; /* include border in width so flap aligns to edge */
   height: 100%;
-  color: var(--white);
+  color: #fff;
   font-weight: 700;
+  font-size: 1.18em;
+  letter-spacing: 1.5px;
+  text-shadow: 0 1px 4px #000, 0 0 2px #7340a3;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end; /* align main label toward the right */
   align-items: center;
-  background: linear-gradient(135deg, var(--accent-purple), #3a2b5c 80%);
-  border-right: 3px solid #000; /* Changed from border-left */
+  padding-right: calc(var(--tab-flap-width) + 12px); /* keep PULL ~12px left of the metallic flap */
+  padding-left: 8px;
+  background: #0b0b0b; /* default disabled = black */
+  border-radius: var(--tab-radius);
   cursor: grab;
-  transition: transform 0.4s ease-out;
+  transition: transform 0.4s cubic-bezier(.19,1,.22,1), opacity 0.3s, filter 0.3s;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 2px 8px rgba(115,64,163,0.18);
+  overflow: hidden;
+  z-index: 2;
+  user-select: none;
 }
+/* Add metallic edge to simulate grip */
+.pull-tab::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: var(--tab-flap-width);
+  height: 100%;
+  background: linear-gradient(180deg, #e6e6e6 0%, #9f9f9f 100%); /* silver flap in idle */
+  border-left: 1px solid #000;
+  border-radius: 0 var(--tab-radius) var(--tab-radius) 0;
+  box-shadow: inset -2px 0 6px rgba(0,0,0,0.6);
+}
+
+/* Add subtle texture to simulate paper or foil */
+.pull-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, rgba(0,0,0,0.05) 2px 4px);
+  opacity: 0.2;
+  pointer-events: none;
+}
+/* Add a small text cue on right edge */
+.pull-tab span.grip-text {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-size: 0.55em;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+}
+
+/* Visible PULL label positioned 12px from the right flap */
+.pull-tab .pull-label {
+  position: absolute;
+  right: calc(var(--tab-flap-width) + 12px);
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* darker inner edge to preserve black visual under the label */
+.pull-tab { box-shadow: inset 0 -10px 18px rgba(0,0,0,0.6), inset 0 6px 8px rgba(0,0,0,0.35), 0 2px 8px rgba(115,64,163,0.18); }
 .pull-tab.pulled {
-  transform: translateX(100%) rotateY(10deg); /* Changed to positive translateX */
+  transform: translateX(-100%);
   cursor: default;
+  opacity: 0.6;
+  filter: blur(0.5px) grayscale(30%);
 }
+
+/* Default (idle) */
+.pull-tab {
+  filter: brightness(0.9) contrast(1);
+  opacity: 0.85;
+}
+
+/* highlight the entire row when tabs are enabled so the player sees affordance */
+.pull-window-row.enabled {
+  border-color: rgba(115,64,163,0.22);
+  box-shadow: 0 0 20px rgba(115,64,163,0.08) inset, 0 4px 18px rgba(115,64,163,0.06);
+}
+
+/* Final pull-tab overrides (ensure correct idle vs enabled visuals) */
+/* Idle: dark tab body with silver flap, no hand cursor */
+.pull-tab {
+  background: linear-gradient(135deg, #262626 0%, #141414 85%);
+  cursor: default !important;
+  color: rgba(255,255,255,0.9);
+}
+.pull-tab::after {
+  /* silver flap visible in idle */
+  background: linear-gradient(180deg, #e6e6e6 0%, #9f9f9f 100%);
+  border-left-color: #000;
+}
+
+/* (removed .pull-tab.enabled rules - use .active/.locked only) */
+
 .reveal-symbols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -118,137 +317,655 @@ body {
   height: 100%;
   align-items: center;
   justify-items: center;
-  background: #141414;
-  font-size: 1.8em; /* Increased font size */
+  background: var(--black);
+  font-size: 1.8em;
 }
 
-/* Right column */
-.controls-column {
-  width: 240px; /* Increased width */
-  background: var(--dark-gray);
-  border: 2px solid var(--accent-purple);
-  border-radius: 6px;
-  padding: 10px 14px;
+/* --- PAYTABLE / PRIZE LIST --- */
+.prize-sidebar {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
 }
-
-.prize-sidebar {
-  flex-grow: 1; /* Allow prize list to fill available space */
-}
-
 .prize-sidebar h3 {
-  margin-bottom: 6px;
-  font-size: 1.1em; /* Increased font size */
-  background: var(--mid-gray);
-  padding: 6px; /* Increased padding */
-  border-radius: 4px;
+  font-size: 1.1em;
+  color: var(--accent-lime);
+  text-align: center;
+  margin: 0 0 6px 0;
 }
-
 .prize-list {
-  list-style: none; /* Added to ensure no bullets */
-  padding: 0; /* Added to remove default padding */
-  margin: 0; /* Added to remove default margin */
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+  font-size: 0.95em;
+  background: #23202b;
+  border-radius: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
 .prize-list li {
   display: flex;
   justify-content: space-between;
-  font-size: 1em; /* Increased font size */
-  padding: 4px 0; /* Adjusted padding */
-  border-bottom: 1px dashed var(--mid-gray);
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #2b2b2b;
 }
+.prize-list li:last-child { border-bottom: none; }
+
+/* --- UNIFIED BUTTON STYLE (based on auto-play popup visuals) --- */
+/* Base flat/pressed button used across the UI for consistency */
+.btn-flat, .action-button, .bet-controls button, .auto-menu-actions button, .auto-confirm-buttons button, .auto-confirm-buttons .action-button, .confirm-actions .action-button, .modal-overlay button {
+  border-radius: 6px;
+  border: 1px solid rgba(115,64,163,0.45);
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1.02em;
+  padding: 10px 12px;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.45),
+    0 3px 8px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: all 0.14s ease;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-flat:hover, .action-button:hover, .bet-controls button:hover, .auto-menu-actions button:hover, .auto-confirm-buttons button:hover {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  box-shadow: 0 6px 18px rgba(115,64,163,0.18);
+  transform: translateY(-1px);
+}
+.btn-flat:active, .action-button:active, .bet-controls button:active, .auto-menu-actions button:active, .auto-confirm-buttons button:active {
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  color: var(--accent-lime);
+  transform: translateY(1px);
+}
+button:disabled, .action-button:disabled, button.inactive {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+  pointer-events: none;
+}
+
+/* Countdown for auto-play button (keeps previous behavior) */
+.action-button.countdown {
+  position: relative;
+}
+.action-button.countdown::after {
+  content: attr(data-count);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.78);
+}
+.action-button .auto-count { font-size: 0.9em; margin-left:6px; color: rgba(255,255,255,0.95); font-weight:700; }
+
+#turbo-btn.turbo-active {
+  background: #ffc107;
+  color: #111;
+}
+
+/* Inline iOS-style toggle (instant reveal) */
+.instant-inline {
+  display: inline-block;
+}
+
+/* Toggle wrapper */
+.toggleWrapper {
+  margin: 0 auto;
+  padding: 2px;
+  width: 40px;
+  border-radius: 6px;
+  background: transparent;
+  display: inline-block;
+}
+.toggleWrapper input.mobileToggle {
+  opacity: 0;
+  position: absolute;
+}
+.toggleWrapper input.mobileToggle + label {
+  position: relative;
+  display: inline-block;
+  height: 22px;
+  width: 40px;
+  border-radius: 30px;
+  background: #222;
+  border: 1px solid #444;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.toggleWrapper input.mobileToggle + label { cursor: pointer; }
+
+/* Off state (default black look) */
+.toggleWrapper input.mobileToggle:not(:checked) + label {
+  background: linear-gradient(180deg, #1a1a1a, #000);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+}
+
+/* On state (active purple/green glow) */
+.toggleWrapper input.mobileToggle:checked + label {
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-lime));
+  box-shadow: 0 0 10px rgba(171,232,63,0.45), 0 0 6px rgba(115,64,163,0.45);
+  border: 1px solid var(--accent-purple);
+}
+
+/* Knob styling */
+.toggleWrapper input.mobileToggle + label:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eee;
+  transition: left 0.2s ease, background 0.3s;
+}
+
+/* Knob when ON */
+.toggleWrapper input.mobileToggle:checked + label:after {
+  left: 20px;
+  background: var(--accent-lime);
+  box-shadow: 0 0 6px rgba(171,232,63,0.45);
+}
+
+/* Optional hover */
+.toggleWrapper input.mobileToggle + label:hover {
+  filter: brightness(1.15);
+}
+.pull-tab.locked {
+  background: linear-gradient(135deg, #262626 0%, #141414 85%);
+  cursor: default;
+  color: rgba(255,255,255,0.7);
+  box-shadow: inset 0 -10px 18px rgba(0,0,0,0.6), inset 0 6px 8px rgba(0,0,0,0.35);
+}
+.pull-tab.locked::after {
+  background: linear-gradient(180deg, #b0b0b0 0%, #5a5a5a 100%);
+  border-left: 1px solid #000;
+  box-shadow: inset -2px 0 4px rgba(0,0,0,0.6);
+}
+
+/* Active (Bet Set) */
+.pull-tab.active {
+  background: var(--tab-bg);
+  color: #fff;
+  cursor: grab;
+  box-shadow: inset 0 -10px 18px rgba(0,0,0,0.6), 0 0 10px rgba(115,64,163,0.3);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.pull-tab.active::after {
+  background: linear-gradient(180deg, #6f4fb0 0%, #2f234a 100%);
+  border-left: 1px solid #000;
+  box-shadow: inset -2px 0 8px rgba(0,0,0,0.4), 0 0 8px rgba(115,64,163,0.15);
+}
+
+/* Pulling Motion */
+.pull-tab.active:active {
+  background: linear-gradient(135deg, #9e5cff 0%, #5a3c7a 80%);
+  cursor: grabbing;
+  box-shadow: 0 0 16px rgba(171,232,63,0.4);
+}
+.toggleWrapper input.mobileToggle:checked + label:after {
+  left: 18px;
+}
+
+.instant-small {
+  font-size: 0.65rem;
+  color: var(--light-gray);
+  margin-top: 2px;
+}
+
+.game-disabled .pull-tab {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* --- AUTO PLAY MENU (revised) --- */
+.auto-play-wrapper {
+  position: relative;
+}
+
+.auto-play-menu {
+  position: absolute;
+  bottom: 100%; /* open upward */
+  top: auto;
+  left: -8px; /* nudge left to sit more to the left of the toggle */
+  transform: none;
+  width: min(340px, 95vw);
+  background: linear-gradient(180deg, #0b0b0b 0%, #1a1a1a 100%);
+  border: 1px solid rgba(115,64,163,0.4);
+  border-radius: 10px;
+  box-shadow: 0 0 24px rgba(0,0,0,0.8), inset 0 0 8px rgba(115,64,163,0.25);
+  padding: 14px 12px;
+  display: none;
+  z-index: 25;
+  animation: autoPopUp 0.25s ease-out forwards;
+}
+@keyframes autoPopUp {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.auto-play-menu.active {
+  display: block;
+}
+
+/* Grid of number buttons */
+.auto-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.auto-option {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95em;
+  border: none;
+  border-radius: 6px;
+  color: var(--white);
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.04),
+    0 3px 6px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.auto-option:hover {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  box-shadow: 0 0 8px rgba(115,64,163,0.3);
+}
+.auto-option:active,
+.auto-option.active,
+.auto-option.selected {
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.8),
+              inset 0 -2px 6px rgba(255,255,255,0.05);
+  color: var(--accent-lime);
+  transform: translateY(1px);
+}
+
+/* Start / Cancel buttons at bottom */
+.auto-menu-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.auto-menu-actions button {
+  flex: 1;
+  min-width: 0;
+  border-radius: 6px;
+  border: 1px solid rgba(115,64,163,0.5);
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  color: var(--white);
+  font-weight: 600;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.4),
+    0 3px 6px rgba(0,0,0,0.5);
+}
+.auto-menu-actions button:hover {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+.auto-menu-actions button:active {
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  color: var(--accent-lime);
+  transform: translateY(1px);
+}
+
+/* --- AUTO PLAY CONFIRM POPUP --- */
+.auto-confirm-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background: linear-gradient(180deg, #0d0a11 0%, #141018 100%);
+  border: 1px solid rgba(115,64,163,0.5);
+  border-radius: 10px;
+  box-shadow:
+    0 0 30px rgba(0,0,0,0.9),
+    0 0 20px rgba(115,64,163,0.35) inset;
+  padding: 16px 18px;
+  width: min(300px, 90vw);
+  color: var(--white);
+  text-align: center;
+  z-index: 999;
+  display: none;
+  animation: confirmFade 0.25s ease-out forwards;
+}
+.auto-confirm-popup.active {
+  display: block;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@keyframes confirmFade {
+  from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.auto-confirm-popup h3 {
+  margin: 0 0 8px;
+  font-size: 1.1em;
+  color: var(--accent-lime);
+  font-weight: 700;
+}
+
+.auto-confirm-popup p {
+  font-size: 0.9em;
+  color: var(--light-gray);
+  margin-bottom: 14px;
+}
+
+.auto-confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.auto-confirm-buttons button {
+  flex: 1;
+  border: 1px solid rgba(115,64,163,0.5);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  color: var(--white);
+  font-weight: 600;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.4),
+    0 3px 6px rgba(0,0,0,0.5);
+}
+.auto-confirm-buttons button:hover {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+.auto-confirm-buttons button:active {
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  color: var(--accent-lime);
+  transform: translateY(1px);
+}
+
+/* Disabled-looking instant toggle */
+.toggleWrapper input.mobileToggle:disabled + label {
+  opacity: 0.4;
+  filter: grayscale(40%);
+  cursor: not-allowed;
+}
+
+.instant-label { display:inline-block; }
+
+/* Confirmation block inside auto menu */
+.auto-confirm {
+  display: none;
+  padding: 8px 6px;
+  border-top: 1px dashed rgba(255,255,255,0.04);
+  margin-bottom: 8px;
+  width: 100%;
+}
+.auto-confirm[aria-hidden="false"], .auto-confirm.active { display: block; }
+.auto-confirm .confirm-text { text-align: center; margin-bottom: 8px; font-weight: 700; }
+.confirm-actions { display:flex; gap:8px; justify-content:center; width:100%; }
+.confirm-actions .action-button { flex:1; min-width:0; }
+
+/* Ensure the container that holds the toggle has positioning for absolute children */
+.auto-wrap { position: relative; overflow: visible; }
+
+/* --- MODALS --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.settings-modal {
+  /* match auto-confirm popup visuals for consistency */
+  background: linear-gradient(180deg, #0d0a11 0%, #141018 100%);
+  border: 1px solid rgba(115,64,163,0.5);
+  border-radius: 10px;
+  box-shadow:
+    0 0 30px rgba(0,0,0,0.9),
+    0 0 20px rgba(115,64,163,0.35) inset;
+  color: var(--white);
+  padding: 16px 18px;
+  width: min(420px, 92%);
+  max-width: 420px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Top-right close X for settings modal */
+.settings-modal .close-x {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: 0;
+  color: var(--light-gray);
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.12s, color 0.12s, transform 0.08s;
+}
+.settings-modal .close-x:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+.settings-modal .close-x:focus {
+  outline: 2px solid rgba(115,64,163,0.4);
+  outline-offset: 2px;
+}
+
+/* In-page debug log panel (for simple embedded browsers without DevTools) */
+.inpage-log {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  width: min(420px, 92vw);
+  max-height: 50vh;
+  background: linear-gradient(180deg, #080608 0%, #0f0b10 100%);
+  border: 1px solid rgba(115,64,163,0.5);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+  color: var(--white);
+  z-index: 12000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 0.82rem;
+}
+.inpage-log.minimized {
+  width: 260px;
+  height: 36px;
+  max-height: none;
+  right: 12px;
+  bottom: 12px;
+  border-radius: 6px;
+}
+.inpage-log.minimized .log-header { padding:6px 10px; }
+.inpage-log.minimized .log-entries { display:none; }
+.inpage-log .toggle-button {
+  width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; padding:0; border-radius:6px;
+}
+.inpage-log .log-header { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; gap:8px; border-bottom:1px solid rgba(255,255,255,0.03); }
+.inpage-log .log-controls { display:flex; gap:6px; }
+.inpage-log .log-entries { padding:8px 10px; overflow:auto; max-height: calc(50vh - 46px); font-family: monospace; white-space: pre-wrap; }
+.log-entry { margin-bottom:6px; padding:6px; border-radius:6px; background: rgba(255,255,255,0.02); }
+.log-entry.debug { color: #ddd; }
+.log-entry.warn { color: #ffd86b; }
+.log-entry.error { color: #ff8080; }
+
+/* History (Last Bets) panel tweaks */
+#panel-lastbets {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Purple scrollbar for the history panel */
+#panel-lastbets::-webkit-scrollbar { width: 10px; }
+#panel-lastbets::-webkit-scrollbar-track { background: #121212; border-radius: 6px; }
+#panel-lastbets::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 6px; border: 2px solid #121212; }
+#panel-lastbets { scrollbar-width: thin; scrollbar-color: var(--accent-purple) #121212; }
+
+#last-bets-list { list-style: none; margin: 0; padding: 6px 4px; }
+
+/* History layout: stacked results + bet + payout + time (compact) */
+#last-bets-list li {
+  display: grid;
+  grid-template-columns: 70px 80px 90px 110px;
+  align-items: center; /* center rows vertically so meta columns match symbol block height */
+  gap: 6px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--mid-gray);
+  font-size: 0.9em;
+}
+/* Column 1: stacked 3 results */
+#last-bets-list li .symbol-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+#last-bets-list li .symbol-group span {
+  font-size: 0.75em;
+  line-height: 1;
+}
+/* Each stacked row should show three symbols horizontally */
+#last-bets-list li .symbol-line {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+#last-bets-list li .symbol-line .symbols { font-size: 0.9em; display: inline-block; }
+/* Columns 2–4: switch from 3 rows to 2 rows */
+#last-bets-list li > span:nth-child(2),
+/* Columns 2–4 use the full height and space their two rows top/bottom */
+#last-bets-list li > span:nth-child(2),
+#last-bets-list li > span:nth-child(3),
+#last-bets-list li > span:nth-child(4) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* push top row up and bottom row down */
+  height: 100%;
+  line-height: 1.1;
+  font-size: 1.05em; /* slightly larger overall */
+  padding: 4px 0;
+}
+#last-bets-list li span:last-child {
+  text-align: right;
+  font-size: 0.85em;
+  line-height: 1.2;
+}
+
+/* Meta rows for columns 2-4 */
+/* Make top/bottom meta text larger and use the vertical space */
+#last-bets-list li .meta-top {
+  font-size: 1.15em;
+  font-weight: 700;
+}
+#last-bets-list li .meta-bottom {
+  font-size: 0.95em;
+  color: var(--light-gray);
+}
+
+/* --- ANIMATIONS & HIGHLIGHTS --- */
+.pull-window-row.row-win {
+  border-color: var(--accent-lime);
+  box-shadow: 0 0 15px var(--accent-lime);
+}
+
 .prize-list li.pay-flash {
   background: var(--accent-lime);
   color: var(--black);
   font-weight: bold;
+  animation: pay-flash 0.8s ease-in-out;
 }
 
-.interaction-block {
-  background: #121212;
+@keyframes pay-flash {
+  from { background-color: var(--accent-lime); }
+  to { background-color: transparent; }
+}
+
+/* --- User-requested button refinements --- */
+.action-button, .bet-controls button {
   border: 1px solid var(--accent-purple);
-  border-radius: 6px;
-  padding: 10px; /* Increased padding */
-  margin-top: var(--panel-gap); /* Added margin */
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.9em;
+  padding: 6px 10px;
+  transition: background 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+.action-button:hover, .bet-controls button:hover {
+  background: linear-gradient(180deg, #3c3c3c 0%, #222 100%);
+  transform: translateY(-1px);
+}
+.action-button:active {
+  background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+  transform: scale(0.97);
 }
 
-.static-label {
-  display: block;
+/* Settings modal button sizing */
+.settings-modal .action-button, .settings-modal button {
+  width: auto;
+  margin: 4px 2px;
+  font-size: 0.85em;
+  padding: 6px 10px;
+  border: 1px solid var(--accent-purple);
+  background: #222;
+}
+
+/* History list layout tightening */
+#last-bets-list li {
+  display: grid;
+  grid-template-columns: 60px 60px 80px 100px;
+  align-items: start;
+  gap: 4px;
+  padding: 4px 2px;
+  border-bottom: 1px solid var(--mid-gray);
   font-size: 0.8em;
-  color: var(--light-gray);
-  margin-bottom: 4px;
 }
-
-.balance-display {
-  background: var(--mid-gray);
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 1.2em; /* Increased font size */
-  margin-bottom: 12px; /* Increased margin */
-}
-.bet-controls {
+#last-bets-list li .symbol-group {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px; /* Increased margin */
-}
-.bet-controls button {
-  flex: 0 0 32px; /* Increased size */
-  height: 32px; /* Increased size */
-  background: var(--mid-gray);
-  border: 1px solid var(--light-gray);
-  color: var(--white);
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-}
-.bet-controls button:hover {
-  background: var(--accent-purple);
-  border-color: var(--accent-lime);
-}
-
-.bet-amount {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.action-button {
-  width: 100%;
-  padding: 12px; /* Increased padding */
-  font-size: 1.1em; /* Increased font size */
-  border-radius: 6px;
-  border: 1px solid var(--light-gray);
-  background: var(--accent-purple);
-  color: var(--white);
-  cursor: pointer;
-  transition: 0.2s;
-  text-transform: uppercase; /* Added for style */
-}
-
-.action-button:hover:not(:disabled) {
-  background: #8a4bbf;
-  border-color: var(--accent-lime); /* Added for consistency */
-}
-
-/* Footer */
-.footer-controls {
-  display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 12px; /* Increased gap */
-  padding: 12px; /* Increased padding */
-  background: #0f0f0f; /* Simplified background */
-  border-top: 2px solid var(--mid-gray); /* Added border-top */
-  margin-top: var(--panel-gap); /* Added margin */
+  align-items: center;
+  gap: 1px;
 }
-.footer-controls .action-button {
-  min-width: 120px; /* Increased min-width */
+#last-bets-list li .symbol-group span {
+  font-size: 0.75em;
+  line-height: 1;
 }
-
-.auto-wrap {
-  position: relative; /* Added for auto-play menu positioning */
-}
-
-/* ...existing code... */
+#last-bets-list li span { text-align: center; }
+#last-bets-list li span:last-child { text-align: right; font-size: 0.75em; line-height: 1.2; }
+#last-bets-list li .symbols { font-size: 0.9em; }

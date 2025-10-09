@@ -4,19 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Three Kings Pull Tabs</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="settings.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- === MAIN CABINET === -->
+  <div id="debug-banner" style="position:fixed;bottom:0;left:0;width:100vw;background:#222;color:#fff;padding:2px 12px;font-size:0.92em;display:none;z-index:9999;line-height:1.6;box-shadow:0 -2px 8px #000;min-height:22px;">
+    <span id="debug-banner-msg"></span>
+    <button id="debug-banner-min" style="float:right;background:none;border:none;color:#fff;font-size:1.1em;cursor:pointer;padding:0 8px;">_</button>
+  </div>
   <div class="game-wrapper">
-
-    <!-- === TOP ROW === -->
     <div class="top-row">
-      
-      <!-- LEFT: GAME / TICKET SIDE -->
+      <div class="pay-column">
+        <div class="prize-sidebar">
+          <h3>PAY TABLE</h3>
+          <ul id="prize-list" class="prize-list"></ul>
+        </div>
+        <div style="margin-top:10px;text-align:center;">
+          <button id="settings-btn" class="action-button" title="Game Settings">⚙️ SETTINGS</button>
+        </div>
+      </div>
+
       <div class="ticket-container">
         <header class="ticket-header">
           <h1>THREE KINGS</h1>
@@ -26,37 +34,29 @@
             <div class="status-sub">Multiplier: <span id="status-multiplier">—</span></div>
           </div>
         </header>
-
-        <!-- GAME AREA -->
         <div class="game-area" id="pull-area-wrapper">
           <h3 class="game-title">Find 3 Matching Symbols in a Row</h3>
 
           <div class="pull-window-row">
             <div class="reveal-symbols" id="symbols-1-1"></div>
-            <div class="pull-tab" data-panel="1">PULL</div>
+            <div class="pull-tab" data-panel="1" tabindex="0"><span class="pull-label">PULL</span><span class="grip-text">GRIP</span></div>
           </div>
 
           <div class="pull-window-row">
             <div class="reveal-symbols" id="symbols-1-2"></div>
-            <div class="pull-tab" data-panel="2">PULL</div>
+            <div class="pull-tab" data-panel="2" tabindex="0"><span class="pull-label">PULL</span><span class="grip-text">GRIP</span></div>
           </div>
 
           <div class="pull-window-row">
             <div class="reveal-symbols" id="symbols-1-3"></div>
-            <div class="pull-tab" data-panel="3">PULL</div>
+            <div class="pull-tab" data-panel="3" tabindex="0"><span class="pull-label">PULL</span><span class="grip-text">GRIP</span></div>
           </div>
 
           <div class="win-condition"><em>Win the corresponding prize shown on the pay board.</em></div>
         </div>
       </div>
 
-      <!-- RIGHT: CONTROLS / PAY TABLE -->
-      <div class="controls-column">
-        <div class="prize-sidebar">
-          <h3>PAY TABLE</h3>
-          <ul id="prize-list" class="prize-list"></ul>
-        </div>
-
+  <div class="controls-column right-column">
         <div class="interaction-block">
           <span class="static-label">BALANCE</span>
           <div id="balance-display" class="balance-display">$10.00</div>
@@ -70,44 +70,56 @@
 
           <button id="reset-button" class="action-button">BUY TICKET</button>
         </div>
-      </div>
-    </div> <!-- end top-row -->
 
-    <!-- === FOOTER CONTROLS === -->
-    <div class="footer-controls">
-      <div class="auto-wrap">
-        <button id="auto-play-toggle" class="action-button">🔁 AUTO PLAY</button>
-        <div id="auto-play-menu" class="auto-play-menu" aria-hidden="true">
-          <div class="auto-options">
-            <button class="auto-option" data-count="5">5</button>
-            <button class="auto-option" data-count="10">10</button>
-            <button class="auto-option" data-count="25">25</button>
-            <button class="auto-option" data-count="50">50</button>
-            <button class="auto-option" data-count="100">100</button>
-            <button class="auto-option" data-count="250">250</button>
-            <button class="auto-option" data-count="500">500</button>
-            <button class="auto-option" data-count="1000">1000</button>
+        <div class="controls-footer">
+          <div class="auto-wrap" style="position:relative;">
+            <button id="auto-play-toggle" class="action-button">🔁 AUTO PLAY</button>
+            <div id="auto-play-menu" class="auto-play-menu" aria-hidden="true">
+              <div class="auto-options">
+                <button class="auto-option" data-count="5">5</button>
+                <button class="auto-option" data-count="10">10</button>
+                <button class="auto-option" data-count="25">25</button>
+                <button class="auto-option" data-count="50">50</button>
+                <button class="auto-option" data-count="100">100</button>
+                <button class="auto-option" data-count="250">250</button>
+                <button class="auto-option" data-count="500">500</button>
+                <button class="auto-option" data-count="1000">1000</button>
+              </div>
+              <!-- confirmation is handled by a separate popup to avoid crowding the menu -->
+              <div class="auto-menu-actions">
+                <button id="auto-start-btn" class="action-button">Start</button>
+                <button id="auto-cancel-btn" class="action-button">Cancel</button>
+              </div>
+            </div>
           </div>
-          <div class="auto-menu-actions">
-            <button id="auto-start-btn" class="action-button">Start</button>
-            <button id="auto-cancel-btn" class="action-button">Cancel</button>
+          <div class="toggle-group" style="display:inline-flex;align-items:flex-start;gap:18px;">
+            <div style="text-align:center;">
+              <div class="toggleWrapper">
+                <input type="checkbox" id="turbo-toggle" class="mobileToggle" />
+                <label for="turbo-toggle" title="Turbo Mode"></label>
+              </div>
+              <div class="instant-small" style="margin-top:6px;">TURBO</div>
+            </div>
+
+            <div style="text-align:center;">
+              <div class="toggleWrapper instant-inline">
+                <input type="checkbox" id="instant-toggle" class="mobileToggle" />
+                <label for="instant-toggle" title="Instant Reveal"></label>
+              </div>
+              <div class="instant-small" style="margin-top:6px;">INSTANT</div>
+            </div>
           </div>
+          <!-- settings button moved back to left pay column -->
         </div>
       </div>
-      <button id="turbo-btn" title="Toggle Turbo Mode">⚡ TURBO</button>
-      <button id="settings-btn" title="Game Settings">⚙️ SETTINGS</button>
-    </div> <!-- end footer-controls -->
+    </div>
+  </div>
 
-  </div> <!-- end game-wrapper -->
-
-
-  <!-- === SETTINGS MODAL === -->
-  <div id="settings-modal-overlay" class="modal-overlay">
+  <div id="settings-modal-overlay" class="modal-overlay hidden">
     <div class="settings-modal">
       <h3>Game Settings & Stats</h3>
-      <div class="modal-controls">
-        <button id="close-settings">Close</button>
-      </div>
+      <!-- top-right close X -->
+      <button id="close-settings" class="close-x" aria-label="Close settings">✕</button>
 
       <div class="settings-tabs">
         <button class="tab-btn active" data-panel="general">General</button>
@@ -123,19 +135,13 @@
           </span>
         </label>
 
-        <label class="setting-item">
-          <span>Turbo Instant Mode</span>
-          <span>
-            <input type="checkbox" id="turbo-instant" class="offscreen" />
-            <span class="knob-switch" aria-hidden="true"></span>
-          </span>
-        </label>
+        <!-- Turbo Instant Mode setting removed — Instant control is inline in the right column -->
 
         <div class="stats-area">
-          <p>Total Bets: <strong id="stats-total-bets">0</strong></p>
-          <p>Total Wins: <strong id="stats-total-wins">0</strong></p>
-          <p>Net Change: <strong id="stats-net-change">$0.00</strong></p>
-          <p>Win Rate: <strong id="stats-win-rate">0%</strong></p>
+          <p><span>Total Bets:</span> <strong id="stats-total-bets">0</strong></p>
+          <p><span>Total Wins:</span> <strong id="stats-total-wins">0</strong></p>
+          <p><span>Net Change:</span> <strong id="stats-net-change">$0.00</strong></p>
+          <p><span>Win Rate:</span> <strong id="stats-win-rate">0%</strong></p>
         </div>
       </div>
 
@@ -148,18 +154,77 @@
     </div>
   </div>
 
-  <!-- === AUTOPLAY FINISH MODAL === -->
-  <div id="autoplay-finish-overlay" class="modal-overlay" aria-hidden="true">
+  <div id="autoplay-finish-overlay" class="modal-overlay" aria-hidden="true" style="display:none;">
+  <!-- autoplay-finish-overlay content only -->
     <div class="settings-modal">
       <h3 id="autoplay-finish-title">Auto Play Finished</h3>
       <div id="autoplay-finish-message">Auto play completed.</div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
-        <button id="autoplay-replay-yes" class="action-button">Yes</button>
-        <button id="autoplay-replay-no" class="action-button">No</button>
+        <button id="autoplay-replay-yes" class="action-button btn-flat">Yes</button>
+        <button id="autoplay-replay-no" class="action-button btn-flat">No</button>
       </div>
     </div>
   </div>
 
-  <script src="game.js"></script>
+  <!-- Move the confirmation modal outside so both can work independently -->
+  <div id="autoplay-confirm-overlay" class="modal-overlay" aria-hidden="true" style="display:none;">
+    <div class="settings-modal">
+      <h3 id="autoplay-confirm-title">Confirm Autoplay</h3>
+      <div id="autoplay-confirm-message">Start autoplay for X rounds?</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+        <button id="autoplay-confirm-yes" class="action-button btn-flat">Yes</button>
+        <button id="autoplay-confirm-no" class="action-button btn-flat">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === THREE KINGS — SFX ONLY (Game logic in game.js) ===
+  let isToneInitialized = false;
+  let isMuted = false;
+  let masterGain, synthRow, synthTicket, paperNoise, synthLoss;
+
+    function initTone() {
+      if (isToneInitialized || !window.Tone) return;
+      masterGain = new Tone.Gain(0.28).toDestination();
+      paperNoise = new Tone.NoiseSynth({
+        noise: { type: "white" },
+        envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.05 }
+      }).connect(masterGain);
+      synthRow = new Tone.Synth({
+        oscillator: { type: "triangle" },
+        envelope: { attack: 0.001, decay: 0.08, sustain: 0.1, release: 0.08 }
+      }).connect(masterGain);
+      synthTicket = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.005, decay: 0.2, sustain: 0.1, release: 0.2 }
+      }).connect(masterGain);
+      // layered buzz for 'not a winner': noise + low tone
+      synthLoss = {
+        noise: new Tone.NoiseSynth({ noise: { type: 'brown' }, envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.06 }, volume: -8 }),
+        tone: new Tone.Synth({ oscillator: { type: 'sawtooth' }, envelope: { attack: 0.002, decay: 0.08, sustain: 0, release: 0.06 }, volume: -6 })
+      };
+      // create a bandpass for the noise and connect both to master gain
+      const _buzzFilter = new Tone.Filter(180, 'bandpass');
+      synthLoss.noise.connect(_buzzFilter);
+      _buzzFilter.connect(masterGain);
+      synthLoss.tone.connect(masterGain);
+      // short click for pre-buzz (sync with third reveal)
+      const synthPre = new Tone.Synth({ oscillator: { type: 'square' }, envelope: { attack: 0.001, decay: 0.03, sustain: 0, release: 0.02 }, volume: -2 }).connect(masterGain);
+      Tone.start();
+      isToneInitialized = true;
+    }
+
+    const SFX = {
+      pull: () => { try { paperNoise?.triggerAttackRelease("16n"); } catch(e){} },
+      rowWin: () => { try { synthRow?.triggerAttackRelease("C4", "16n"); } catch(e){} },
+      ticketWin: () => { try { synthTicket?.triggerAttackRelease(["E4", "G4", "C5"], "8n"); } catch(e){} },
+      buzz: () => { try { synthLoss?.noise?.triggerAttackRelease("16n"); synthLoss?.tone?.triggerAttackRelease("C2", "16n"); } catch(e){} },
+      buzzPre: () => { try { synthRow?.triggerAttackRelease("A4", "16n"); } catch(e){} },
+    };
+  </script>
+
+  <script src="game.js" defer></script>
+
 </body>
 </html>

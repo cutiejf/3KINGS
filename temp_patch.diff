@@ -1,0 +1,103 @@
+*** Begin Patch
+*** Update File: game.js
+@@
+ const $$ = s => [...document.querySelectorAll(s)];
+ 
+ function populateEL() {
+@@
+ }
+ 
+ 
+ // ---------------- UI Helpers ----------------
+ const fmt = n => `$${n.toFixed(2)}`;
++
++// Missing helpers implemented to restore gameplay
++function prizeFor(symbol) {
++  try {
++    if (PAYTABLE && Object.prototype.hasOwnProperty.call(PAYTABLE, symbol)) {
++      const v = parseFloat(PAYTABLE[symbol]);
++      return isNaN(v) ? 0 : v;
++    }
++  } catch (e) {}
++  const found = SYMBOLS.find(s => s.s === symbol);
++  return found ? (parseFloat(found.p) || 0) : 0;
++}
++
++function lockGameUI(lock) {
++  const shouldLock = !!lock;
++  try {
++    if (EL.pullArea) EL.pullArea.classList.toggle('game-disabled', shouldLock);
++    if (EL.tabs && typeof EL.tabs.forEach === 'function') {
++      EL.tabs.forEach(t => t.classList.toggle('locked', shouldLock));
++    }
++  } catch(e) { console.warn('lockGameUI failed', e); }
++}
++
++function updatePlayButtonUI() {
++  try {
++    if (!EL.buyStop) return;
++    // If autoplay is active, defer to its updater to keep the count text
++    if (STATE.auto && STATE.auto.active) {
++      if (typeof updateAutoButton === 'function') updateAutoButton();
++      return;
++    }
++    EL.buyStop.textContent = STATE.playing ? 'REVEAL ALL' : 'BUY TICKET';
++  } catch(e) { console.warn('updatePlayButtonUI failed', e); }
++}
++
++function setMultiplierDisplay(value) {
++  try {
++    const el = document.getElementById('status-multiplier');
++    if (!el) return;
++    if (value === null || value === undefined) el.textContent = '-';
++    else el.textContent = String(value);
++  } catch(e) { console.warn('setMultiplierDisplay failed', e); }
++}
++
++function drawRowsToDOM() {
++  try {
++    for (let r = 1; r <= 3; r++) {
++      const row = STATE.results[r];
++      const container = document.getElementById(`symbols-1-${r}`);
++      if (!container) continue;
++      container.innerHTML = '';
++      if (Array.isArray(row)) {
++        row.forEach(sym => {
++          const sp = document.createElement('span');
++          sp.className = 'symbols';
++          sp.textContent = sym;
++          container.appendChild(sp);
++        });
++      }
++    }
++  } catch(e) { console.warn('drawRowsToDOM failed', e); }
++}
++
++function revealPanel(panelId) {
++  try {
++    const id = String(panelId);
++    const tab = (EL.tabs || []).find ? EL.tabs.find(t => t.dataset.panel === id) : null;
++    if (!tab || tab.classList.contains('pulled') || tab.classList.contains('disabled')) return;
++    try { if (typeof SFX !== 'undefined' && SFX.pull) SFX.pull(); } catch(e) {}
++    tab.classList.add('pulled');
++    tab.style.transform = 'translateX(-100%)';
++    revealRow(parseInt(id, 10));
++    updateTabEnabledState();
++    updatePlayButtonUI();
++  } catch(e) { console.warn('revealPanel failed', e); }
++}
++
++function revealAll() {
++  try {
++    [1,2,3].forEach(i => {
++      const tab = (EL.tabs || [])[i-1];
++      if (!tab || tab.classList.contains('pulled')) return;
++      revealPanel(i);
++    });
++    // Ensure end-of-round check in case revealRow skipped immediate check (turbo)
++    if (typeof checkEnd === 'function') checkEnd();
++  } catch(e) { console.warn('revealAll failed', e); }
++}
+@@
+ function updateAutoButton() {
+*** End Patch
