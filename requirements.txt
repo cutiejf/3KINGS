@@ -1,0 +1,4 @@
+# Minimal requirements for the math engine
+# (standard library only; no external packages required)
+
+# No external packages needed
